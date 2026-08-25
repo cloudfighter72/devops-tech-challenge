@@ -1,27 +1,29 @@
 # Backend ECR Repo
 resource "aws_ecr_repository" "backend" {
-  name                 = "node-backend"
+  name                 = "${var.project_name}-backend"
   image_tag_mutability = "MUTABLE"
+  force_delete = true
 
   image_scanning_configuration {
     scan_on_push = true
   }
 
   tags = {
-    Name = "node-backend-repo"
+    Name = "${var.project_name}-backend-repo"
   }
 }
 
 # Frontend ECR Repo
 resource "aws_ecr_repository" "frontend" {
-  name                 = "node-frontend"
+  name                 = "${var.project_name}-frontend"
   image_tag_mutability = "MUTABLE"
+  force_delete = true
 
   image_scanning_configuration {
     scan_on_push = true
   }
 
   tags = {
-    Name = "node-frontend-repo"
+    Name = "${var.project_name}-frontend-repo"
   }
 }

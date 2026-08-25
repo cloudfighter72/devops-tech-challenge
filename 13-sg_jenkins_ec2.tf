@@ -1,10 +1,10 @@
 resource "aws_security_group" "jenkins_sg" {
-  name        = "jenkins-sg"
+  name        = "${var.project_name}-jenkins-sg"
   description = "Allow inbound traffic for Jenkins server"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name = "jenkins-sg"
+    Name = "${var.project_name}-jenkins-sg"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_vpc_security_group_ingress_rule" "jenkins_ui" {
 resource "aws_vpc_security_group_egress_rule" "jenkins_egress_allow_all" {
   security_group_id = aws_security_group.jenkins_sg.id
   cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # Allows all ports and protocols
+  ip_protocol       = "-1"
 
   tags = {
     Name = "jenkins-egress-allow-all"

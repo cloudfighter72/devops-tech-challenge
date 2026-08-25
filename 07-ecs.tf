@@ -1,19 +1,19 @@
 # ECS Cluster
 resource "aws_ecs_cluster" "cluster" {
-  name = "node-cluster"
+  name = var.ecs_cluster_name
 
   tags = {
-    Name = "node-ecs-cluster"
+    Name = "${var.project_name}-ecs-cluster"
   }
 }
 
 # --- BACKEND ---
 resource "aws_ecs_task_definition" "backend_task" {
-  family                   = "backend-task"
+  family                   = "${var.project_name}-backend-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = var.backend_cpu
+  memory                   = var.backend_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
@@ -34,11 +34,11 @@ resource "aws_ecs_task_definition" "backend_task" {
 }
 
 resource "aws_ecs_service" "backend_service" {
-  name            = "backend-service"
+  name            = "${var.project_name}-backend-service"
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.backend_task.arn
   launch_type     = "FARGATE"
-  desired_count   = 1
+  desired_count   = var.ecs_desired_count
 
   load_balancer {
     target_group_arn = aws_lb_target_group.backend.arn
@@ -59,11 +59,11 @@ resource "aws_ecs_service" "backend_service" {
 
 # --- FRONTEND ---
 resource "aws_ecs_task_definition" "frontend_task" {
-  family                   = "frontend-task"
+  family                   = "${var.project_name}-frontend-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = var.frontend_cpu
+  memory                   = var.frontend_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
@@ -84,11 +84,11 @@ resource "aws_ecs_task_definition" "frontend_task" {
 }
 
 resource "aws_ecs_service" "frontend_service" {
-  name            = "frontend-service"
+  name            = "${var.project_name}-frontend-service"
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.frontend_task.arn
   launch_type     = "FARGATE"
-  desired_count   = 1
+  desired_count   = var.ecs_desired_count
 
   load_balancer {
     target_group_arn = aws_lb_target_group.frontend.arn

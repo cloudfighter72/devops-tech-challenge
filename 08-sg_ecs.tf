@@ -1,10 +1,10 @@
 resource "aws_security_group" "ecs_sg" {
-  name        = "node_ecs_sg"
+  name        = "${var.project_name}-ecs-sg"
   description = "Allow traffic from the Application Load Balancer to ECS tasks"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name = "ecs_sg"
+    Name = "${var.project_name}-ecs-sg"
   }
 }
 

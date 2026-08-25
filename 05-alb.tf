@@ -1,11 +1,11 @@
 # Application Load Balancer Security Group
 resource "aws_security_group" "alb_sg" {
-  name        = "node-alb-sg"
+  name        = "${var.project_name}-alb-sg"
   description = "Allow HTTP traffic to Application Load Balancer"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name = "node-alb-sg"
+    Name = "${var.project_name}-alb-sg"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress" {
 
 # Application Load Balancer
 resource "aws_lb" "app" {
-  name               = "node-app-alb"
+  name               = "${var.project_name}-app-alb"
   internal           = false
   load_balancer_type = "application"
 
@@ -45,13 +45,13 @@ resource "aws_lb" "app" {
   ]
 
   tags = {
-    Name = "node-app-alb"
+    Name = "${var.project_name}-app-alb"
   }
 }
 
 # Frontend Target Group
 resource "aws_lb_target_group" "frontend" {
-  name        = "node-frontend-tg"
+  name        = "${var.project_name}-frontend-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -65,13 +65,13 @@ resource "aws_lb_target_group" "frontend" {
   }
 
   tags = {
-    Name = "node-frontend-tg"
+    Name = "${var.project_name}-frontend-tg"
   }
 }
 
 # Backend Target Group
 resource "aws_lb_target_group" "backend" {
-  name        = "node-backend-tg"
+  name        = "${var.project_name}-backend-tg"
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
@@ -89,7 +89,7 @@ resource "aws_lb_target_group" "backend" {
   }
 
   tags = {
-    Name = "node-backend-tg"
+    Name = "${var.project_name}-backend-tg"
   }
 }
 

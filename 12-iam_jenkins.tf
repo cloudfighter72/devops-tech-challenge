@@ -10,12 +10,12 @@ data "aws_iam_policy_document" "jenkins_assume_role" {
 }
 
 resource "aws_iam_role" "jenkins_role" {
-  name               = "jenkins-ec2-role"
+  name               = "${var.project_name}-jenkins-ec2-role"
   assume_role_policy = data.aws_iam_policy_document.jenkins_assume_role.json
 }
 
 resource "aws_iam_role_policy" "jenkins_ecs_ecr_policy" {
-  name = "jenkins-ecs-ecr-policy"
+  name = "${var.project_name}-jenkins-ecs-ecr-policy"
   role = aws_iam_role.jenkins_role.id
 
   policy = jsonencode({
@@ -64,6 +64,6 @@ resource "aws_iam_role_policy" "jenkins_ecs_ecr_policy" {
 }
 
 resource "aws_iam_instance_profile" "jenkins_profile" {
-  name = "jenkins-instance-profile"
+  name = "${var.project_name}-jenkins-instance-profile"
   role = aws_iam_role.jenkins_role.name
 }
